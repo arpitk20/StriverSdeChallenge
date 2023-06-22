@@ -99,7 +99,7 @@ class Solution
     public:
     void kth(Node *root, int &k, int &ans)
     {
-        if(!root)
+        if(!root||k<0)
             return;
         kth(root->right, k, ans);
         k--;//since we can get kth largest from traversing the left only
