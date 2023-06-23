@@ -134,7 +134,7 @@ struct Node {
 // than the max key in BST, return -1 
 void find(Node* root, int& k, int& total)
 {
-    if(!root)
+    if(!root||k<0)
         return;
         
     find(root->left, k, total);
