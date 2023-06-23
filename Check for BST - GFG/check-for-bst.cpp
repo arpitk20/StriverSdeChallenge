@@ -22,6 +22,7 @@ struct Node {
 class Solution
 {
     public:
+    //Function to check whether a Binary Tree is BST or not.
     void find(Node* root, int& prev_val, bool& ans)
     {
         if(!root||!ans)
@@ -36,11 +37,10 @@ class Solution
         prev_val = root->data;
         find(root->right, prev_val, ans);
     }
-    //Function to check whether a Binary Tree is BST or not.
     bool isBST(Node* root) 
     {
-        bool ans = 1;
         int prev_val = INT_MIN;
+        bool ans = 1;
         find(root, prev_val, ans);
         return ans;
     }
