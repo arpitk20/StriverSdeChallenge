@@ -123,12 +123,22 @@ class Solution
             if(curr->right)
                 q.push(make_pair(curr->right,hd+1));
         }
-         for(auto it: mp)
+        //  for(auto it: mp)
+        // {
+        //     for(auto i : it.second)
+        //     {
+        //         ans.push_back(i);
+        //     }
+        // }
+        auto it = mp.begin();
+        
+        while(it!=mp.end())
         {
-            for(auto i : it.second)
+            for(int i=0;i<it->second.size();i++)
             {
-                ans.push_back(i);
+                ans.push_back(it->second[i]);
             }
+            it++;
         }
         return ans;
     }
