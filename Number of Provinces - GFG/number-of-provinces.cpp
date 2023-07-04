@@ -28,6 +28,19 @@ class Solution {
         }
         return;
     }
+    void dfs(int vertex, vector<int> adjLs[], int vis[])
+    {
+        vis[vertex] = 1;
+        for(auto x:adjLs[vertex])
+        {
+            if(!vis[x])
+            {
+               dfs(x, adjLs, vis); 
+            }
+        }
+        return;
+    }
+
     int numProvinces(vector<vector<int>> adj, int V) {
         
         vector<int> adjLs[V]; 
@@ -49,7 +62,7 @@ class Solution {
             if(!vis[i]) {
                 // counter to count the number of provinces 
                 cnt++;
-                bfs(i, adjLs, vis); 
+                dfs(i, adjLs, vis); 
             }
         }
         return cnt;
