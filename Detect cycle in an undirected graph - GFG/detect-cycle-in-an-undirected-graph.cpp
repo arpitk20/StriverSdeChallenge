@@ -29,15 +29,31 @@ class Solution {
         }
         return false;
     }
+    bool detectDFS(int node, int parent, bool vis[], vector<int> adj[])
+    {
+        vis[node] = true;
+        for(auto x:adj[node])
+        {
+            if(!vis[x])
+            {
+                if(detectDFS(x, node, vis, adj)==true)
+                    return true;
+            }
+            else if(x!=parent)//means we met a marked node which is not parent
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     bool isCycle(int V, vector<int> adj[]) 
     {
-        
         bool vis[V] = {false};
         for(int i=0;i<V;i++)
         {
             if(!vis[i])
             {
-                if(detect(i, vis, adj)==true)
+                if(detectDFS(i, -1, vis, adj)==true)
                     return true;
             }
         }
