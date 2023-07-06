@@ -36,24 +36,58 @@ class Solution {
         return false;
     }
     vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
-        
+    
+//DFS SOLUTION
+
         //can be solved using cycle detect or topological sort
-        int vis[V] = {0};
-        int pathVis[V] = {0};
-        int check[V] = {0};//to mark safe nodes
-        vector<int> safeNodes;
+        // int vis[V] = {0};
+        // int pathVis[V] = {0};
+        // int check[V] = {0};//to mark safe nodes
+        // vector<int> safeNodes;
         
+        // for(int i=0;i<V;i++)
+        // {
+        //     if(!vis[i])
+        //     {
+        //         dfsCheck(i, vis, pathVis, adj, check);
+        //     }
+        // }
+        // for(int i=0;i<V;i++)
+        //     if(check[i]==1)
+        //         safeNodes.push_back(i);
+
+//BFS TOPOLOGICAL SORT SOLUTION
+        vector<int> safeNodes;
+        //we reverse the graph and insert the appropriate nodes
+        vector<int> adjRev[V];
         for(int i=0;i<V;i++)
         {
-            if(!vis[i])
+            for(auto x:adj[i])
+                adjRev[x].push_back(i);
+        }
+        int inDegree[V] = {0};
+        for(int i=0;i<V;i++)
+        {
+            for(auto x:adjRev[i])
+                inDegree[x]++;
+        }
+        queue<int> q;
+        for(int i=0;i<V;i++)
+            if(inDegree[i]==0)
+                q.push(i);
+        while(!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+            safeNodes.push_back(node);
+            for(auto x:adjRev[node])
             {
-                dfsCheck(i, vis, pathVis, adj, check);
+                inDegree[x]--;
+                if(inDegree[x]==0)
+                    q.push(x);
             }
         }
-        for(int i=0;i<V;i++)
-            if(check[i]==1)
-                safeNodes.push_back(i);
-                
+        sort(safeNodes.begin(), safeNodes.end());
         return safeNodes;
     }
 };
