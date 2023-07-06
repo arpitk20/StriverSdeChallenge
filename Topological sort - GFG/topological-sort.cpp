@@ -23,23 +23,55 @@ class Solution
 	}
 	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
+//DFS SOLUTION
+
+        // bool vis[V] = {false};
+        // vector<int> ans;
+        // stack<int> st;
+        // for(int i=0;i<V;i++)
+        // {
+        //     if(!vis[i])
+        //     {
+        //         dfs(i, adj, vis, st);
+        //     }
+        // }
+        // while(!st.empty())
+        // {
+        //     ans.push_back(st.top());
+        //     st.pop();
+        // }
+        // return ans;
         
-        bool vis[V] = {false};
-        vector<int> ans;
-        stack<int> st;
+//BFS SOLUTION
+
+        int inDegree[V] = {0};
         for(int i=0;i<V;i++)
         {
-            if(!vis[i])
+            for(auto x:adj[i])
+                inDegree[x]++;
+        }
+        queue<int> q;
+        //if indegree is 0 then it's in the answer
+        for(int i=0;i<V;i++)
+            if(inDegree[i]==0)
+                q.push(i);
+                
+                
+        vector<int> topo;
+        while(!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+            topo.push_back(node);
+            
+            for(auto x:adj[node])
             {
-                dfs(i, adj, vis, st);
+                inDegree[x]--;
+                if(inDegree[x]==0)
+                    q.push(x);
             }
         }
-        while(!st.empty())
-        {
-            ans.push_back(st.top());
-            st.pop();
-        }
-        return ans;
+        return topo;
 	}
 };
 
