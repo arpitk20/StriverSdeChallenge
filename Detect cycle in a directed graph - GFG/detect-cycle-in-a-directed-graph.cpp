@@ -29,15 +29,49 @@ class Solution {
         int vis[V] = {0};
         int pathVis[V] = {0};
         
+        
+//DFS SOLUTION
+
+        // for(int i=0;i<V;i++)
+        // {
+        //     if(!vis[i])
+        //     {
+        //         if(dfsCheck(i, vis, pathVis, adj)==true)
+        //             return true;
+        //     }
+        // }
+        // return false;
+        
+//BFS SOLUTION
+
+        int inDegree[V] = {0};
         for(int i=0;i<V;i++)
         {
-            if(!vis[i])
+            for(auto x:adj[i])
+                inDegree[x]++;
+        }
+        
+        queue<int> q;
+        for(int i=0;i<V;i++)
+            if(inDegree[i]==0)
+                q.push(i);
+              
+        vector<int> topo;  
+        while(!q.empty())
+        {
+            int node = q.front();
+            q.pop();
+            topo.push_back(node);
+            for(auto x:adj[node])
             {
-                if(dfsCheck(i, vis, pathVis, adj)==true)
-                    return true;
+                inDegree[x]--;
+                if(inDegree[x]==0)
+                    q.push(x);
             }
         }
-        return false;
+        if(topo.size()==V)
+            return false;
+        return true;
     }
     
 };
