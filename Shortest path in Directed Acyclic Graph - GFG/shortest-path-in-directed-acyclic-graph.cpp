@@ -12,49 +12,49 @@ class Solution {
     {
         vis[node] = true;
         for(auto x:adj[node])
+        {
             if(!vis[x.first])
+            {
                 dfs(x.first, vis, adj, st);
+            }
+        }
         st.push(node);
         return;
     }
      vector<int> shortestPath(int N,int M, vector<vector<int>>& edges){
         
-        //Step 1: Do a Topo Sort
-        vector<pair<int, int> > adj[N];
+        vector<pair<int, int>> adj[N];
         for(int i=0;i<M;i++)
         {
             int u = edges[i][0];
-            adj[u].push_back({edges[i][1], edges[i][2]});//0->1 and edge, 2nd is the weight
+            adj[u].push_back({edges[i][1], edges[i][2]});//edge, weight
         }
-        
         int vis[N] = {0};
-        stack<int> st;//when the dfs call is over, push the element into the stack
-        //for topo sort
+        stack<int> st;
         for(int i=0;i<N;i++)
         {
             if(!vis[i])
                 dfs(i, vis, adj, st);
         }
-        
-        //Step 2: Take nodes out of the stack and relax the edges
         vector<int> dist(N, 1e9);
-        dist[0] = 0;//src node is marked zero
+        dist[0] = 0;
         while(!st.empty())
         {
-            int node = st.top();    
+            int node = st.top();
             st.pop();
             for(auto x:adj[node])
             {
                 int v = x.first;
                 int wt = x.second;
-                if(dist[node]+wt < dist[v])
-                    dist[v] = dist[node] + wt;//if it is easier to reach via parent
+                if(dist[node]+wt<dist[v])
+                    dist[v] = dist[node]+wt;
             }
         }
         for(int i=0;i<N;i++)
+        {
             if(dist[i]==1e9)
                 dist[i] = -1;
-        
+        }
         return dist;
     }
 };
