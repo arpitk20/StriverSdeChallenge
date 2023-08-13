@@ -1,35 +1,33 @@
 class Solution {
 public:
     #define pb push_back
-    void solve(vector<vector<int>>&res, vector<int>& output, vector<int>&candidates, int target, int index)
+    void solve(vector<int>& candidates, vector<vector<int>> &ans, vector<int> &output, int index, int target)
     {
-        int n = candidates.size();
-        
         if(target==0)
         {
-            res.pb(output);
-            return;
+            ans.pb(output);
+            return ;
         }
-        
-        if(target<0)//Can't be achieved with this number
-            return;
-        
-        if(index==n)//can't be achieved here as well
+        if(index==candidates.size())
+        {
+            return;//reached the end with not sum, so not answer
+        }
+        if(target<0)//can't reach
             return;
         
         //exclude
-        solve(res, output, candidates, target, index+1);
-        
+        solve(candidates, ans, output, index+1, target);
         //include
         output.pb(candidates[index]);
-        solve(res, output, candidates, target-candidates[index], index);
+        solve(candidates, ans, output, index, target-candidates[index]);
         output.pop_back();
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<vector<int> > res;
+        
+        vector<vector<int>> ans;
         vector<int> output;
         int index = 0;
-        solve(res, output, candidates, target, index);
-        return res;
+        solve(candidates, ans, output, index, target);
+        return ans;
     }
 };
