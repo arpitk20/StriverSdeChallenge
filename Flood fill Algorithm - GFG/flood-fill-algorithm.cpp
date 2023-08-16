@@ -5,44 +5,31 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
 public:
-    void dfs(int row, int col, int newColor, 
-    vector<vector<int>>& image, vector<vector<int>>& ans, int iniColor)
+    int drow[4] = {-1, 0, 1, 0};
+    int dcol[4] = {0, -1, 0, 1};
+    
+    void dfs(int row, int col, vector<vector<int>> &ans, vector<vector<int>>& vis, int iniColor, int newColor)
     {
+        int n = ans.size();
+        int m = ans[0].size();
         ans[row][col] = newColor;
-        int n = image.size();
-        int m = image[0].size();
-        
-        int nrow = row, ncol = col;//initial row and col
-        //four directions up, left, right , bot
-        //UP
-        nrow = row-1;
-        if(nrow>=0 && image[nrow][ncol]==iniColor && ans[nrow][ncol]!=newColor)
+        vis[row][col] = 1;
+        for(int i=0;i<4;i++)
         {
-            dfs(nrow, ncol, newColor, image, ans, iniColor);
+            int nrow = row+drow[i];
+            int ncol = col+dcol[i];
+            if(nrow>=0&&ncol>=0&&nrow<n&&ncol<m&&!vis[nrow][ncol]&&ans[nrow][ncol]==iniColor)
+                dfs(nrow, ncol, ans, vis, iniColor, newColor) ;   
         }
-        //DOWn
-        nrow = row+1;
-        if(nrow<n && image[nrow][ncol]==iniColor && ans[nrow][ncol]!=newColor)
-        {
-            dfs(nrow, ncol, newColor, image, ans, iniColor);
-        }
-        nrow = row, ncol = col-1;
-        if(ncol>=0 && image[nrow][ncol]==iniColor && ans[nrow][ncol]!=newColor)
-        {
-            dfs(nrow, ncol, newColor, image, ans, iniColor);
-        }
-        ncol = col+1;
-        if(ncol<m && image[nrow][ncol]==iniColor && ans[nrow][ncol]!=newColor)
-        {
-            dfs(nrow, ncol, newColor, image, ans, iniColor);
-        }
-        return;
     }
     vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newColor) {
         
-        vector<vector<int> > ans = image;
         int iniColor = image[sr][sc];
-        dfs(sr, sc, newColor, image, ans, iniColor);
+        int n = image.size();
+        int m = image[0].size();
+        vector<vector<int>> ans = image;
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        dfs(sr, sc, ans, vis, iniColor, newColor);
         return ans;
     }
 };
