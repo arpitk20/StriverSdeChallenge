@@ -8,61 +8,36 @@ using namespace std;
 
 class Solution {
   public:
-    void bfs(int vertex, vector<int> adjLs[], int vis[])
+    void dfs(int node, vector<int> adjList[], int vis[], vector<int>& ans)
     {
-        queue<int> q;
-        q.push(vertex);
-        vis[vertex] = 1;
-        while(!q.empty())
-        {
-            int temp = q.front();
-            q.pop();
-            for(auto x:adjLs[temp])
-            {
-                if(!vis[x])
-                {
-                    q.push(x);
-                    vis[x] = 1;
-                }
-            }
-        }
-        return;
-    }
-    void dfs(int vertex, vector<int> adjLs[], int vis[])
-    {
-        vis[vertex] = 1;
-        for(auto x:adjLs[vertex])
+        ans.push_back(node);
+        vis[node] = 1;
+        for(auto x:adjList[node])
         {
             if(!vis[x])
             {
-               dfs(x, adjLs, vis); 
+                dfs(x, adjList, vis, ans);
             }
         }
-        return;
     }
-
     int numProvinces(vector<vector<int>> adj, int V) {
         
-        vector<int> adjLs[V]; 
-        
-        // to change adjacency matrix to list 
-        for(int i = 0;i<V;i++) {
-            for(int j = 0;j<V;j++) {
-                // self nodes are not considered
-                if(adj[i][j] == 1 && i != j) {
-                    adjLs[i].push_back(j); 
-                    adjLs[j].push_back(i); 
-                }
-            }
+        vector<int> adjList[V];
+        for(int i = 0; i < V; i++)
+        for(int j = 0; j < V; j++)
+        {
+            if(adj[i][j] != 0)
+                adjList[i].push_back(j);
         }
-        int vis[V] = {0}; 
-        int cnt = 0; 
-        for(int i = 0;i<V;i++) {
-            // if the node is not visited
-            if(!vis[i]) {
-                // counter to count the number of provinces 
+        int cnt = 0;
+        int vis[V] = {0};
+        vector<int> ans;
+        for(int i=0;i<V;i++)
+        {
+            if(!vis[i])
+            {
                 cnt++;
-                dfs(i, adjLs, vis); 
+                dfs(i, adjList, vis, ans);
             }
         }
         return cnt;
