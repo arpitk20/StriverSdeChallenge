@@ -10,9 +10,9 @@ class Solution {
         
         vector<int> ans;
         queue<int> q;
-        q.push(0);
         int vis[V] = {0};
         vis[0] = 1;
+        q.push(0);
         while(!q.empty())
         {
             int temp = q.front();
