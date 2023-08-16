@@ -1,68 +1,59 @@
 class Solution {
 public:
-    bool isSafe(int row, int col, vector<string>& board, int n)
+    bool isSafe(vector<string>& board, int row, int col, int n)
     {
-        //for copying multiple times
         int duprow = row;
         int dupcol = col;
-        
         while(col>=0)
         {
             if(board[row][col]=='Q')
-            {
                 return false;
-            }
             col--;
         }
-        
         col = dupcol;
-        while(col>=0 && row>=0)
+        while(row>=0 && col>=0)
         {
             if(board[row][col]=='Q')
                 return false;
-            
-            row--;
             col--;
+            row--;
         }
-        
         col = dupcol;
         row = duprow;
         while(row<n && col>=0)
         {
             if(board[row][col]=='Q')
                 return false;
-            row++;
             col--;
+            row++;
         }
-        
         return true;
-        
     }
-    void solve(int col, vector<string>& board, vector<vector<string> >& res, int n)
+    void solve(int col, vector<string>& board, vector<vector<string>> &ans, int n)
     {
         if(col==n)
         {
-            res.push_back(board);
+            ans.push_back(board);
             return;
         }
-        for(int row=0;row<n;row++)//we're checking every single column
+        for(int row = 0;row<n;row++)
         {
-            if(isSafe(row, col, board, n))//if a particular cell is safe
+            if(isSafe(board, row, col, n))
             {
-                board[row][col] = 'Q';//we update that
-                solve(col+1, board, res, n);
-                board[row][col] = '.';//Backtrack
+                board[row][col] = 'Q';
+                solve(col+1, board, ans, n);
+                board[row][col] = '.';
             }
         }
     }
     vector<vector<string>> solveNQueens(int n) {
-        vector<vector<string> > res;
+        
+        vector<vector<string>> ans;
         vector<string> board(n);
         string s(n, '.');
         for(int i=0;i<n;i++)
             board[i] = s;
-        
-        solve(0, board, res, n);
-        return res;
+        solve(0, board, ans, n);
+        return ans;
     }
 };
