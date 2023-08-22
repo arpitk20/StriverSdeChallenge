@@ -8,58 +8,55 @@ class Solution
     public:
     //Function to find minimum time required to rot all oranges. 
     int orangesRotting(vector<vector<int>>& grid) {
+        int drow[4] = {-1, 0, 1, 0};
+        int dcol[4] = {0, -1, 0, 1};
         
-        //will have to use BFS since have to move simultaneously
         int n = grid.size();
         int m = grid[0].size();
-        queue<pair<pair<int, int>, int> > q;//row, col, time
-        int vis[n][m];
+        
         int cntFresh = 0;
+        
+        int vis[n][m];
+        queue<pair<pair<int, int>, int>> q;
         for(int i=0;i<n;i++)
+        for(int j=0;j<m;j++)
         {
-            for(int j=0;j<m;j++)
+            if(grid[i][j]==2)
             {
-                //if cell contain rotten oranges
-                if(grid[i][j]==2)
-                {
-                    q.push({{i, j}, 0});
-                    vis[i][j] = 2;
-                }
-                else//if it is empty or has a fresh orange
-                    vis[i][j]=0;
-                if(grid[i][j]==1)//it is a 1
-                    cntFresh++;
+                q.push({{i, j}, 0});
+                vis[i][j] = 2;
             }
+            else
+                vis[i][j] = 0;
+            if(grid[i][j]==1)
+                cntFresh++;
         }
-        int tm = 0;
-        //delta row and delta column for traversal in joining rows and columns
-        int drow[] = {-1, 0, +1, 0};
-        int dcol[] = {0, 1, 0, -1}; 
-        int cnt = 0;    
+        int tm = 0, cnt = 0;
         while(!q.empty())
         {
             int row = q.front().first.first;
             int col = q.front().first.second;
             int t = q.front().second;
-            tm = max(tm, t);
             q.pop();
+            
+            tm = max(tm, t);
+            
             for(int i=0;i<4;i++)
             {
                 int nrow = row+drow[i];
                 int ncol = col+dcol[i];
-                
-                if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && vis[nrow][ncol]==0
-                && grid[nrow][ncol]==1)
+                if(nrow>=0 && ncol>=0 && nrow<n && ncol<m && grid[nrow][ncol]==1 
+                && vis[nrow][ncol] != 2)
                 {
-                    q.push({{nrow, ncol}, t+1});
-                    vis[nrow][ncol]=2;
                     cnt++;
+                    vis[nrow][ncol] = 2;
+                    q.push({{nrow, ncol}, t+1});
                 }
             }
         }
-            if(cnt!=cntFresh)
-                return -1;
-            return tm;
+
+        
+        return (cnt==cntFresh)?tm:-1;
     }
 };
 
