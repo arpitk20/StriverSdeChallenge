@@ -5,33 +5,39 @@ using namespace std;
 // } Driver Code Ends
 class Solution {
   public:
-    // Function to detect cycle in an undirected graph.
-    bool dfs(int node, vector<int> adj[], int parent, int vis[])
-    {
-        vis[node] = 1;
-        for(auto x:adj[node])
-        {
-            if(!vis[x])
-            {
-                if(dfs(x, adj, node, vis))
-                    return true;
-            }
-            else if(x != parent)//node is visited and not a parent
-                return true;
-        }
-        return false;
-    }
-    bool isCycle(int V, vector<int> adj[]) {
+    bool bfs(int node, int parent, vector<int> adj[], int vis[]) {
+    vis[node] = 1;
+    queue<pair<int, int>> q;
+    q.push({node, parent});
+    
+    while (!q.empty()) {
+        node = q.front().first;
+        parent = q.front().second;
+        q.pop();
         
-        int vis[V] = {0};
-        for(int i=0;i<V;i++)
-        {
-            if(!vis[i])
-                if(dfs(i, adj, -1, vis))
-                    return true;
+        for (auto x : adj[node]) {
+            if (!vis[x]) {
+                vis[x] = 1;
+                q.push({x, node});
+            } else if (x != parent) {
+                return true; // Cycle found
+            }
         }
-        return false;
     }
+    return false;
+}
+
+bool isCycle(int V, vector<int> adj[]) {
+    int vis[V] = {0};
+    for (int i = 0; i < V; i++) {
+        if (!vis[i]) {
+            if (bfs(i, -1, adj, vis))
+                return true; // Cycle found
+        }
+    }
+    return false; // No cycle
+}
+
 };
 
 //{ Driver Code Starts.
