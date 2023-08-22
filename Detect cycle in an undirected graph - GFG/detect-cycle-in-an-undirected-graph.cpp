@@ -6,56 +6,29 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in an undirected graph.
-    bool detect(int src, bool vis[], vector<int> adj[])
+    bool dfs(int node, vector<int> adj[], int parent, int vis[])
     {
-        vis[src] = true;
-        queue<pair<int, int> > q;//node, parent
-        q.push({src, -1});
-        while(!q.empty())
-        {
-            int node = q.front().first;
-            int parent = q.front().second;
-            q.pop();
-            for(auto x:adj[node])
-            {
-                if(!vis[x])
-                {
-                    vis[x]=true;
-                    q.push({x, node});
-                }
-                else if(parent!=x)//means it had been marked and it is not parent
-                    return true;
-            }
-        }
-        return false;
-    }
-    bool detectDFS(int node, int parent, bool vis[], vector<int> adj[])
-    {
-        vis[node] = true;
+        vis[node] = 1;
         for(auto x:adj[node])
         {
             if(!vis[x])
             {
-                if(detectDFS(x, node, vis, adj)==true)
+                if(dfs(x, adj, node, vis))
                     return true;
             }
-            else if(x!=parent)//means we met a marked node which is not parent
-            {
+            else if(x != parent)//node is visited and not a parent
                 return true;
-            }
         }
         return false;
     }
-    bool isCycle(int V, vector<int> adj[]) 
-    {
-        bool vis[V] = {false};
+    bool isCycle(int V, vector<int> adj[]) {
+        
+        int vis[V] = {0};
         for(int i=0;i<V;i++)
         {
             if(!vis[i])
-            {
-                if(detectDFS(i, -1, vis, adj)==true)
+                if(dfs(i, adj, -1, vis))
                     return true;
-            }
         }
         return false;
     }
