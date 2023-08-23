@@ -11,30 +11,31 @@ public:
     {
         int n = grid.size();
         int m = grid[0].size();
+        
         for(int i=0;i<8;i++)
         {
             int nrow = row;
             int ncol = col;
             int c = 0;
-            while(nrow>=0 && ncol>=0 && nrow<n && ncol<m && c<word.size() 
-            && word[c] == grid[nrow][ncol])
+            while(nrow>=0&&ncol>=0&&nrow<n&&ncol<m&&c<word.size()
+            &&grid[nrow][ncol]==word[c])
             {
-                nrow = nrow+drow[i];
-                ncol = ncol+dcol[i];
+                nrow = nrow + drow[i];
+                ncol = ncol + dcol[i];
                 c++;
+                
                 if(c==word.size())
                     return true;
             }
         }
-        
         return false;
     }
 	vector<vector<int>>searchWord(vector<vector<char>>grid, string word){
 	    
+	    vector<vector<int>> ans;
 	    int n = grid.size();
 	    int m = grid[0].size();
 	    
-	    vector<vector<int>> ans;
 	    for(int i=0;i<n;i++)
 	    for(int j=0;j<m;j++)
 	    {
