@@ -6,10 +6,10 @@ using namespace std;
 class Solution
 {
 	public:
-	//Function to return list containing vertices in Topological order. 
-	void dfs(int node, vector<int> adj[], bool vis[], stack<int>&st)
+	//Function to return list containing vertices in Topological order.
+	void dfs(int node, vector<int> adj[], int vis[], stack<int>& st)
 	{
-	    vis[node] = true;
+	    vis[node] = 1;
 	    for(auto x:adj[node])
 	    {
 	        if(!vis[x])
@@ -17,61 +17,25 @@ class Solution
 	            dfs(x, adj, vis, st);
 	        }
 	    }
-	    st.push(node);//when the DFS for the required element is over we know 
-	    //everything after that is covered  
-	    return;
+	    st.push(node);
 	}
 	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
-//DFS SOLUTION
-
-        // bool vis[V] = {false};
-        // vector<int> ans;
-        // stack<int> st;
-        // for(int i=0;i<V;i++)
-        // {
-        //     if(!vis[i])
-        //     {
-        //         dfs(i, adj, vis, st);
-        //     }
-        // }
-        // while(!st.empty())
-        // {
-        //     ans.push_back(st.top());
-        //     st.pop();
-        // }
-        // return ans;
-        
-//BFS SOLUTION
-
-        int inDegree[V] = {0};
-        for(int i=0;i<V;i++)
-        {
-            for(auto x:adj[i])
-                inDegree[x]++;
-        }
-        queue<int> q;
-        //if indegree is 0 then it's in the answer
-        for(int i=0;i<V;i++)
-            if(inDegree[i]==0)
-                q.push(i);
-                
-                
-        vector<int> topo;
-        while(!q.empty())
-        {
-            int node = q.front();
-            q.pop();
-            topo.push_back(node);
-            
-            for(auto x:adj[node])
-            {
-                inDegree[x]--;
-                if(inDegree[x]==0)
-                    q.push(x);
-            }
-        }
-        return topo;
+	    vector<int> ans;
+	    int vis[V] = {0};
+	    
+	    stack<int> st;
+	    for(int i=0;i<V;i++)
+	    {
+	        if(!vis[i])
+	            dfs(i, adj, vis, st);
+	    }
+	    while(!st.empty())
+	    {
+	        ans.push_back(st.top());
+	        st.pop();
+	    }
+	    return ans;
 	}
 };
 
