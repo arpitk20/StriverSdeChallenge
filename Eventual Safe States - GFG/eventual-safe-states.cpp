@@ -10,50 +10,42 @@ using namespace std;
 
 class Solution {
   public:
-    bool dfs(int i, vector<int> adj[], vector<int> &vis)
-    {
-        vis[i] = 1;
+    vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
         
-        for(auto n : adj[i])
+        vector<int> topo;
+        vector<int> adjRev[V];
+        for(int i=0;i<V;i++)
         {
-            if(vis[n] == 0)
-            {
-                if(dfs(n, adj, vis)) return true;
-            }
-            else if (vis[n] == 1) return true;
+            for(auto x:adj[i])
+                adjRev[x].push_back(i);
         }
-        
-        vis[i] = 2;
-        return false;
-    }
-    
-  public:
-    // Function to detect cycle in a directed graph.
-    vector<int> eventualSafeNodes(int V, vector<int> adj[]) 
-    {
-        /*
-            0 -> unvisited node
-            1 -> visited node
-            2 -> visited previously in current path
-            3 -> safe node
-        */
-        vector<int> vis (V, 0);
-        vector<int> ans;
-        
-        for(int i = 0; i < V; i++)
-        {
-            if(vis[i] == 0) 
-            {
-                dfs(i, adj, vis);
-            }
-        }
-        
-        for(int i = 0; i < V; i++)
-        {
-            if(vis[i] == 2) ans.push_back(i);
-        }
-        
-        return ans;
+	    
+	    int inDegree[V] = {0};
+	    for(int i=0;i<V;i++)
+	    {
+	        for(auto x:adjRev[i])
+	            inDegree[x]++;
+	    }
+	    queue<int> q;
+	    for(int i=0;i<V;i++)
+	    {
+	        if(inDegree[i]==0)
+	            q.push(i);
+	    }
+	    while(!q.empty())
+	    {
+	        int node = q.front();
+	        q.pop();
+	        topo.push_back(node);
+	        for(auto x:adjRev[node])
+	        {
+	            inDegree[x]--;
+	            if(inDegree[x]==0)
+	                q.push(x);
+	        }
+	    }
+	    sort(topo.begin(), topo.end());
+	    return topo;
     }
 };
 
