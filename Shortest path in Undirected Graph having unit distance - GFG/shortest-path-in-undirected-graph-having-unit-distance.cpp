@@ -8,38 +8,42 @@ using namespace std;
 // User function Template for C++
 class Solution {
   public:
+    void dfs(int node, vector<int> adj[], bool vis[], vector<int>& dist)
+    {
+        vis[node] = true;
+        for(auto x:adj[node])
+        {
+            if(dist[node]+1<dist[x])
+            {
+                dist[x] = 1+dist[node];
+                dfs(x, adj, vis, dist);
+            }
+        }
+        return ;
+    }
     vector<int> shortestPath(vector<vector<int>>& edges, int N,int M, int src){
         
         vector<int> adj[N];
         for(int i=0;i<M;i++)
         {
-            int u = edges[i][0];
-            int v = edges[i][1];
-            
-            adj[u].push_back(v);
-            adj[v].push_back(u);
+            adj[edges[i][0]].push_back(edges[i][1]);
+            adj[edges[i][1]].push_back(edges[i][0]);
         }
+        bool vis[N] = {false};
         vector<int> dist(N, 1e9);
         dist[src] = 0;
-        queue<int> q;
-        q.push(src);
-        while(!q.empty())
+        for(int i=0;i<N;i++)
         {
-            int node = q.front();
-            q.pop();
-            for(auto x:adj[node])
+            if(!vis[i])
             {
-                if(dist[node]+1<dist[x])
-                {
-                    dist[x] = 1+dist[node];
-                    q.push(x);
-                }
+                dfs(i, adj, vis, dist);
             }
         }
         for(int i=0;i<N;i++)
+        {
             if(dist[i]==1e9)
                 dist[i] = -1;
-        
+        }
         return dist;
     }
 };
