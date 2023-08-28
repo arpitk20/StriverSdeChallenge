@@ -11,29 +11,27 @@ class Solution
     vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
     {
         
-//Implementing using Set
         vector<int> dist(V, 1e9);
-        dist[S] = 0;//distance from zero is 0;
-        set<pair<int, int> > st;
-        st.insert({0, S});//weight, source
+        dist[S] = 0;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        //weight, node
+        pq.push({0, S});
         
-        while(!st.empty())
+        while(!pq.empty())
         {
-            pair<int, int> p = *(st.begin());
-            int weight = p.first;
-            int node = p.second;
-            st.erase(p);
+            int weight = pq.top().first;
+            int node = pq.top().second;
+            pq.pop();
             for(auto x:adj[node])
             {
                 if(weight+x[1]<dist[x[0]])
                 {
-                    if(dist[x[0]]!=1e9)
-                        st.erase({dist[x[0]], x[0]});
-                    dist[x[0]] = weight + x[1];
-                    st.insert({dist[x[0]], x[0]});
+                    dist[x[0]] = x[1]+weight;
+                    pq.push({dist[x[0]], x[0]});
                 }
             }
         }
+        
         return dist;
     }
 };
