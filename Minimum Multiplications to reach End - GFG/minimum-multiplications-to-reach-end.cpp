@@ -10,35 +10,34 @@ using namespace std;
 
 class Solution {
   public:
+    int mod = 1e5;
     int minimumMultiplications(vector<int>& arr, int start, int end) {
         
         if(start==end)
-            return 0;//edge case
-        
-        queue<pair<int, int>> q;
-        q.push({start, 0});//node, step
-        vector<int> dist(100000, 1e9);
-        dist[start] = 0; 
-        
+            return 0;
+        queue<pair<int, int>> q;//steps, node
+        vector<int> dist(100000, 1e9);//steps to reach a number from this array
+        q.push({start, 0});
         
         while(!q.empty())
         {
             int node = q.front().first;
             int steps = q.front().second;
             q.pop();
-
+            
             for(auto x:arr)
             {
-                int num = (x*node)%100000;
+                int num = x*node%mod;
                 if(steps+1<dist[num])
                 {
                     dist[num] = steps+1;
                     if(num==end)
-                        return steps+1;
-                    q.push({num, steps+1});
+                        return dist[num];
+                    q.push({num, dist[num]});
                 }
             }
         }
+        
         return -1;
     }
 };
