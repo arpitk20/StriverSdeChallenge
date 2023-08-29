@@ -12,39 +12,28 @@ class Solution {
 	void shortest_distance(vector<vector<int>>&matrix){
         
         int n = matrix.size();
-        //if the node is unreachable then I mark it with a big number
+        int m = matrix[0].size();
+        
         for(int i=0;i<n;i++)
+        for(int j=0;j<m;j++)
         {
-            for(int j=0;j<n;j++)
-            {
-                if(matrix[i][j]==-1)
-                    matrix[i][j] = 1e9;
-            }
+            if(matrix[i][j]==-1)
+                matrix[i][j] = 1e9;
         }
-        for(int via = 0;via<n;via++)// the node via which we travel
+        for(int via = 0;via<n;via++)
         {
             for(int i=0;i<n;i++)
-            {
-                for(int j=0;j<n;j++)
-                {
-                    matrix[i][j] = min(matrix[i][j], (matrix[i][via]+matrix[via][j]));
-                }
-            }
-        }
-        
-        
-        
-        
-        //restoring the older configuration
-        for(int i=0;i<n;i++)
-        {
             for(int j=0;j<n;j++)
             {
-                if(matrix[i][j]==1e9)
-                    matrix[i][j] = -1;
+                matrix[i][j] = min(matrix[i][j], (matrix[i][via] + matrix[via][j]));
             }
         }
-        return;
+        for(int i=0;i<n;i++)
+        for(int j=0;j<m;j++)
+        {
+            if(matrix[i][j]==1e9)
+                matrix[i][j] = -1;
+        }
 	}
 };
 
