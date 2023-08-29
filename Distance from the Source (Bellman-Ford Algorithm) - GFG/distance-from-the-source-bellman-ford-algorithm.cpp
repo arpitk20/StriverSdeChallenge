@@ -16,30 +16,21 @@ class Solution {
         
         vector<int> dist(V, 1e8);
         dist[S] = 0;
-        //bcoz I want the loop to run for V-1 times
         for(int i=0;i<V-1;i++)
         {
             for(auto x:edges)
             {
-                int u = x[0];
-                int v = x[1];
-                int wt = x[2];
-                if(dist[u]!=1e8 && dist[u]+wt<dist[v])
-                {
-                    dist[v] = dist[u]+wt;
-                }
+                int weight = x[2];
+                if(dist[x[0]]!=1e8 && weight+dist[x[0]]<dist[x[1]])
+                    dist[x[1]] = dist[x[0]]+weight;
             }
         }
-        //if there is a loop then it will relax on another edge
+        //if there is another cycle then it will relax 1 more time
         for(auto x:edges)
         {
-            int u = x[0];
-            int v = x[1];
-            int wt = x[2];
-            if(dist[u]!=1e8 && dist[u]+wt<dist[v])
-            {
+            int weight = x[2];
+            if(dist[x[0]]!=1e8 && weight+dist[x[0]]<dist[x[1]])
                 return {-1};
-            }
         }
         return dist;
     }
