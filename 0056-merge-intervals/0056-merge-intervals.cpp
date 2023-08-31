@@ -9,7 +9,7 @@ public:
         for(int i=0;i<n;i++)
         {
             if(ans[ans.size()-1][1] >= intervals[i][0])//compare the last and the first value
-                ans[ans.size()-1][1] = max(ans.back()[1], intervals[i][1]);
+                ans[ans.size()-1][1] = max(ans[ans.size()-1][1], intervals[i][1]);
             else
                 ans.push_back(intervals[i]);
         }
