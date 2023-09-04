@@ -9,24 +9,30 @@ using namespace std;
 
 class Solution{
 public:
-    void dfs(int row, int col, vector<vector<int>> &vis, vector<vector<char>> &mat)
+    int drow[4] = {-1, 0, 1, 0};
+    int dcol[4] = {0, -1, 0, 1};
+    void bfs(int row, int col, vector<vector<char>> &ans, vector<vector<int>> &vis)
     {
-        int n = mat.size();
-        int m = mat[0].size();
-        if(vis[row][col]==1)
-            return;
-        vis[row][col]=1;
-        int delrow[] = {-1, 0, 1, 0};
-        int delcol[] = {0, -1, 0, 1};
+        int n = ans.size();
+        int m = ans[0].size();
         
-        for(int i=0;i<4;i++)
+        vis[row][col] = true;
+        queue<pair<int, int>> q;
+        q.push({row, col});
+        while(!q.empty())
         {
-            int nrow = row+delrow[i];
-            int ncol = col+delcol[i];
-            if(nrow>=0 && nrow<n && ncol>=0 && ncol<m && !vis[nrow][ncol] 
-            && mat[nrow][ncol]=='O')
+            int row = q.front().first;
+            int col = q.front().second;
+            q.pop();
+            for(int i=0;i<4;i++)
             {
-                dfs(nrow, ncol, vis, mat);
+                int nrow = row+drow[i];
+                int ncol = col+dcol[i];
+                if(nrow>=0&&nrow<n&&ncol>=0&&ncol<m&&!vis[nrow][ncol]&&ans[nrow][ncol]=='O')
+                {
+                    vis[nrow][ncol] = true;
+                    q.push({nrow, ncol});
+                }
             }
         }
         return;
@@ -34,43 +40,31 @@ public:
     vector<vector<char>> fill(int n, int m, vector<vector<char>> mat)
     {
         
-
-        vector<vector<int>> vis(n, vector<int>(m, 0));
-
-        //will use DFS to get all the boundary connected O's
-        //traverse first row and last row
-        for(int j=0;j<m;j++)
-        {
-            if(!vis[0][j] && mat[0][j]=='O')
-            {
-                dfs(0, j, vis, mat);
-            }
-            if(!vis[n-1][j] && mat[n-1][j]=='O')
-            {
-                dfs(n-1, j, vis, mat);
-            }
-        }
+        vector<vector<char>> ans = mat;
+        vector<vector<int>> vis(n, vector<int>(m, false));
+        
         for(int i=0;i<n;i++)
         {
             if(!vis[i][0] && mat[i][0]=='O')
-            {
-                dfs(i, 0, vis, mat);
-            }
+                bfs(i, 0, ans, vis);
             if(!vis[i][m-1] && mat[i][m-1]=='O')
-            {
-                dfs(i, m-1, vis, mat);
-            }
+                bfs(i, m-1, ans, vis);
         }
-        //traverse first column
-        for(int i=0;i<n;i++)
+        for(int j=0;j<m;j++)
         {
-            for(int j=0;j<m;j++)
-            {
-                if(!vis[i][j] && mat[i][j]=='O')
-                    mat[i][j] = 'X';
-            }
+            if(!vis[0][j] && mat[0][j]=='O')
+                bfs(0, j, ans, vis);
+            if(!vis[n-1][j] && mat[n-1][j]=='O')
+                bfs(n-1, j, ans, vis);
         }
-        return mat;
+        for(int i=0;i<n;i++)
+        for(int j=0;j<m;j++)
+        {
+            if(!vis[i][j] && ans[i][j]=='O')
+                ans[i][j] = 'X';
+        }
+        
+        return ans;
     }
 };
 
