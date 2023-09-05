@@ -8,7 +8,7 @@ class Solution {
     // Function to return the adjacency list for each vertex.
     vector<vector<int>> printGraph(int V, vector<pair<int,int>>edges) {
         
-        vector<int> adj[V];
+
         vector<vector<int>> ans(V);
         for(auto x:edges)
         {
