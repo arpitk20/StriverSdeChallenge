@@ -15,25 +15,28 @@ class Solution {
         
         if(start==end)
             return 0;
-        queue<pair<int, int>> q;//steps, node
-        vector<int> dist(100000, 1e9);//steps to reach a number from this array
-        q.push({start, 0});
+            
+        int n = arr.size();
+        
+        vector<int> dist(1e5, 1e9);
+        queue<pair<int, int>> q;
+        q.push({start, 0});//node, steps
         
         while(!q.empty())
         {
-            int node = q.front().first;
+            int num = q.front().first;
             int steps = q.front().second;
             q.pop();
             
-            for(auto x:arr)
+            for(int i=0;i<n;i++)
             {
-                int num = x*node%mod;
-                if(steps+1<dist[num])
+                int x = num*arr[i]%mod;
+                if(x==end)
+                    return steps+1;
+                if(steps+1<dist[x])
                 {
-                    dist[num] = steps+1;
-                    if(num==end)
-                        return dist[num];
-                    q.push({num, dist[num]});
+                    dist[x] = steps+1;
+                    q.push({x, steps+1});
                 }
             }
         }
