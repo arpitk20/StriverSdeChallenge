@@ -19,25 +19,28 @@ class Solution
 {
     public:
     //Function to merge k sorted arrays.
+    typedef pair<int, pair<int, int>> pipii;
     vector<int> mergeKArrays(vector<vector<int>> arr, int K)
     {
+        
         vector<int> ans;
-        //pair<int, pair<int, int> > p->to store the elements
-        priority_queue<pair<int, pair<int, int> >, vector<pair<int, pair<int, int> >>, greater<pair<int, pair<int, int> > > > pq;
-        //K is the row and col size
+        
+        priority_queue<pipii, vector<pipii>, greater<pipii>> pq;
         for(int i=0;i<K;i++)
-            pq.push({arr[i][0], {i, 0}});//element, row, col
+            pq.push({arr[i][0], {i, 0}});
+        
         while(!pq.empty())
         {
-            int value = pq.top().first;
+            int element = pq.top().first;
             int row = pq.top().second.first;
             int col = pq.top().second.second;
-            
-            ans.push_back(value);
             pq.pop();
-            if(col<K-1)//we are within the limits of the matrix
+            
+            ans.push_back(element);
+            if(col+1<K)
                 pq.push({arr[row][col+1], {row, col+1}});
         }
+        
         return ans;
     }
 };
