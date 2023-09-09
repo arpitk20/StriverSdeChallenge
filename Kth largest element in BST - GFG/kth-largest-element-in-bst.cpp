@@ -97,24 +97,23 @@ struct Node {
 class Solution
 {
     public:
-    void kth(Node *root, int &k, int &ans)
+    void solve(Node* root, int &K, int& ans)
     {
-        if(!root||k<0)
+        if(!root||K==0)
             return;
-        kth(root->right, k, ans);
-        k--;//since we can get kth largest from traversing the left only
-        if(k==0)    
+        solve(root->right, K, ans);
+        K--;
+        if(K==0)
         {
             ans = root->data;
             return;
         }
-        kth(root->left, k, ans);
-        
+        solve(root->left, K, ans);
     }
-    int kthLargest(Node *root, int k)
+    int kthLargest(Node *root, int K)
     {
-        int ans ;
-        kth(root, k, ans);
+        int ans = -1;
+        solve(root, K, ans);
         return ans;
     }
 };
