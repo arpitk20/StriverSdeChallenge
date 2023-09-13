@@ -100,26 +100,27 @@ struct Node
 class Solution{
   public:
     /*You are required to complete below method */
-    int find(Node* root, int k, vector<int>& ans)
+    int solve(Node* root, int k, vector<int>& ans)
     {
         if(!root)
             return 0;
-        if(!root->left&&!root->right)
+        if(!root->left && !root->right)
             return 1;
-        int left = find(root->left, k, ans);
-        int right = find(root->right, k, ans);
+            
+        int left = solve(root->left, k, ans);
+        int right = solve(root->right, k, ans);
+        
         if(left+right==k)
             ans.push_back(root->data);
-        return (left+right);
+            
+        return left+right;
     }
     vector<int> btWithKleaves(Node *root, int k)
     { 
-        if(!root)
-            return {-1};
         vector<int> ans;
-        find(root, k, ans);
+        solve(root, k, ans);
         if(ans.empty())
-            ans.push_back(-1);
+            return {-1};
         return ans;
     }
 
