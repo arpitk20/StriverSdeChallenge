@@ -114,21 +114,26 @@ struct Node
 class Solution
 {
 public:
-    void solve(Node* root, vector<Node* >& ans, int level)
-    {
-        if(!root)
-            return;
-        if(level%2==1)
-            ans.push_back(root);
-        solve(root->left, ans, level+1);
-        solve(root->right, ans, level+1);
-    }
     vector<Node *> nodesAtOddLevels(Node *root)
     {
-        //We can do this via preorder traversal
-        vector<Node* > ans;
-        int level = 1;
-        solve(root, ans, level);
+        vector<Node*> ans;
+        queue<pair<Node*, int>> q;
+        q.push({root, 1});
+        while(!q.empty())
+        {
+            Node* node = q.front().first;
+            int level = q.front().second;
+            q.pop();
+            
+            if(level%2==1)
+                ans.push_back(node);
+                
+            if(node->left)
+                q.push({node->left, level+1});
+            if(node->right)
+                q.push({node->right, level+1});
+        }
+        
         return ans;
     }
 };
